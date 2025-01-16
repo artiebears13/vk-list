@@ -1,101 +1,138 @@
-// src/pages/MoviesPage/index.tsx
-
 import React, { useEffect, useRef } from 'react';
 import { observer } from 'mobx-react-lite';
-import { movieStore } from '../../store/MovieStore';
-import { List, Button, Skeleton, Input } from 'antd';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { List, Skeleton, Select, Input, Radio } from 'antd';
 
-import styles from './MoviesPage.module.css'; // стили через CSS-модули
+import { movieStore } from '../../store/MovieStore';
+import MovieCard from '../../components/MovieCard/MovieCard';
+import SearchBar from '../../components/SearchBar/SearchBar';
+import styles from './MoviesPage.module.scss';
+
+const { Option } = Select;
 
 const MoviesPage: React.FC = observer(() => {
-    const { movies, fetchMovies, isLoading, page, totalPages, deleteMovie, editMovie } = movieStore;
+    const {
+        filteredAndSortedMovies,
+        isLoading,
+        page,
+        totalPages,
+        filterType,
+        filterYear,
+        sortField,
+        sortDirection,
+    } = movieStore;
 
     const loaderRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
-        // При первой загрузке
-        if (movies.length === 0) {
-            fetchMovies();
+        if (movieStore.movies.length === 0) {
+            movieStore.fetchMovies();
         }
-    }, [fetchMovies, movies.length]);
+    }, []);
 
     useEffect(() => {
-        // IntersectionObserver для бесконечного скролла
         const observer = new IntersectionObserver(
             (entries) => {
                 const target = entries[0];
                 if (target.isIntersecting && !isLoading && page <= totalPages) {
-                    fetchMovies();
+                    movieStore.fetchMovies();
                 }
             },
             {
-                root: null, // viewport
-                rootMargin: '500px', // подгрузка чуть заранее
+                root: null,
+                rootMargin: '300px',
                 threshold: 0,
             }
         );
-
         if (loaderRef.current) {
             observer.observe(loaderRef.current);
         }
-
         return () => {
             if (loaderRef.current) {
                 observer.unobserve(loaderRef.current);
             }
         };
-    }, [isLoading, page, totalPages, fetchMovies]);
+    }, [isLoading, page, totalPages, movieStore.fetchMovies]);
 
-    const handleDelete = (id: number) => {
-        deleteMovie(id);
+    const handleDelete = (id: string) => {
+        movieStore.deleteMovie(id);
     };
 
-    const handleEdit = (id: number) => {
+    const handleEdit = (id: string) => {
         const newTitle = prompt('Введите новое название фильма') || '';
         if (newTitle.trim()) {
-            editMovie(id, newTitle);
+            movieStore.editMovie(id, newTitle);
         }
     };
 
     return (
         <div className={styles.container}>
-            <h1>Популярные фильмы TMDB</h1>
+            <h1>Список фильмов (OMDb)</h1>
+
+            <SearchBar />
+
+            <div className={styles.filtersBar}>
+                <Select
+                    style={{ width: 120, marginRight: 8 }}
+                    value={filterType}
+                    onChange={(val) => movieStore.setFilterType(val)}
+                >
+                    <Option value="all">Все</Option>
+                    <Option value="movie">Movies</Option>
+                    <Option value="series">Series</Option>
+                    <Option value="episode">Episodes</Option>
+                </Select>
+
+                <Input
+                    style={{ width: 100, marginRight: 8 }}
+                    placeholder="Год"
+                    value={filterYear}
+                    onChange={(e) => movieStore.setFilterYear(e.target.value)}
+                />
+
+                <Select
+                    style={{ width: 120, marginRight: 8 }}
+                    value={sortField}
+                    onChange={(val) => movieStore.setSortField(val)}
+                >
+                    <Option value="none">Без сортировки</Option>
+                    <Option value="title">По названию</Option>
+                    <Option value="year">По году</Option>
+                    <Option value="type">По типу</Option>
+                </Select>
+
+                <Radio.Group
+                    value={sortDirection}
+                    onChange={(e) => movieStore.setSortDirection(e.target.value)}
+                >
+                    <Radio.Button value="asc">Asc</Radio.Button>
+                    <Radio.Button value="desc">Desc</Radio.Button>
+                </Radio.Group>
+            </div>
 
             <List
-                dataSource={movies}
+                grid={{ gutter: 16, column: 4 }}
+                dataSource={filteredAndSortedMovies}
                 renderItem={(movie) => (
-                    <List.Item
-                        actions={[
-                            <Button
-                                type="text"
-                                icon={<EditOutlined />}
-                                onClick={() => handleEdit(movie.id)}
-                            />,
-                            <Button
-                                danger
-                                type="text"
-                                icon={<DeleteOutlined />}
-                                onClick={() => handleDelete(movie.id)}
-                            />,
-                        ]}
-                    >
-                        <List.Item.Meta
-                            title={
-                                <span style={{ color: movie.isLocallyEdited ? 'red' : 'inherit' }}>
-                  {movie.title}
-                </span>
-                            }
+                    <List.Item>
+                        <MovieCard
+                            id={movie.id}
+                            title={movie.title}
+                            year={movie.year}
+                            type={movie.type}
+                            poster={movie.poster}
+                            isEdited={movie.isLocallyEdited}
+                            onEdit={handleEdit}
+                            onDelete={handleDelete}
                         />
                     </List.Item>
                 )}
             />
 
-            {/* Индикатор загрузки */}
             {isLoading && <Skeleton active />}
 
-            {/* "Невидимый" блок, за которым следит IntersectionObserver */}
-            {page <= totalPages && <div ref={loaderRef} style={{ height: 1 }} />}
+            {page <= totalPages && (
+                <div ref={loaderRef} className={styles.loaderPlaceholder} />
+            )}
         </div>
     );
 });

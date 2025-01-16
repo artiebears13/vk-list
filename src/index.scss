@@ -1,0 +1,18 @@
+
+@use './styles/variables';
+@use './styles/mixins';
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-family-default);
+  background-color: variables.$color-bg;
+  color: variables.$color-text;
+}
+
+.app-container {
+  min-height: 100vh;
+  background-color: variables.$color-bg;
+  color: variables.$color-text;
+  transition: background-color 0.3s, color 0.3s;
+}

@@ -1,0 +1,24 @@
+.header {
+  background-color: #f5f5f5;
+  padding: 16px;
+}
+
+.drawerNav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.navItem {
+  display: block;
+  padding: 12px 16px;
+  background-color: #fafafa;
+  border-radius: 4px;
+  color: #333;
+  text-decoration: none;
+  transition: background-color 0.3s, color 0.3s;
+
+  &:hover {
+    background-color: #1890ff;
+    color: #fff;
+  }
+}

@@ -1,5 +1,11 @@
-$primary-color: #2f54eb;
-$bg-light: #f0f0f0;
+
+
+$primary-color: var(--color-primary);
+$color-bg: var(--color-bg);
+$color-text: var(--color-text);
+$color-bg-secondary: var(--color-text-secondary);
+$color-border: var(--color-border);
+
 $font-family-default: 'Helvetica', 'Arial', sans-serif;
 
 $container-width: 800px;

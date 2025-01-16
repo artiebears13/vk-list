@@ -1,0 +1,34 @@
+.cardWrapper {
+  position: relative;
+  &:hover .favoriteIcon {
+    opacity: 1;
+  }
+}
+
+.posterImage {
+  height: 350px;
+  object-fit: cover;
+}
+
+.noPoster {
+  height: 350px;
+  background-color: #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #555;
+  text-align: center;
+}
+
+.favoriteIcon {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.showFav{
+  opacity: 1;
+}
