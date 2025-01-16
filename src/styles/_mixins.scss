@@ -1,0 +1,22 @@
+@mixin container($width) {
+  max-width: $width;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+@mixin center-text {
+  text-align: center;
+}
+
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == mobile {
+    @media (max-width: 767px) {
+      @content;
+    }
+  }
+  @else if $breakpoint == tablet {
+    @media (max-width: 1024px) {
+      @content;
+    }
+  }
+}
