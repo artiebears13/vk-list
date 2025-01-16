@@ -35,7 +35,7 @@ const Header: React.FC = () => {
                         Главная
                     </Link>
                     <Link to="/favorites" onClick={onClose} className={styles.navItem}>
-                        Избранное46
+                        Избранное
                     </Link>
                 </nav>
             </Drawer>

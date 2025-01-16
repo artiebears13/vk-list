@@ -38,7 +38,7 @@ class MovieStore {
             const apiKey = import.meta.env.VITE_OMDB_API_KEY;
 
             const response = await fetch(
-                `http://www.omdbapi.com/?apikey=${apiKey}&s=${this.searchQuery}&page=${this.page}`
+                `https://www.omdbapi.com/?apikey=${apiKey}&s=${this.searchQuery}&page=${this.page}`
             );
             const data = await response.json();
 
@@ -76,7 +76,7 @@ class MovieStore {
             // @ts-ignore
             const apiKey = import.meta.env.VITE_OMDB_API_KEY;
             const response = await fetch(
-                `http://www.omdbapi.com/?apikey=${apiKey}&i=${imdbID}&plot=short`
+                `https://www.omdbapi.com/?apikey=${apiKey}&i=${imdbID}&plot=short`
             );
             const data = await response.json();
 
