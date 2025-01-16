@@ -1,8 +1,8 @@
-import React from 'react';
 import {HashRouter as Router, Routes, Route} from 'react-router-dom';
-import MoviesPage from './pages/MoviesPage';
-import FavoritesPage from './pages/FavoritesPage';
 import Header from "./components/Header/Header.tsx";
+import MoviesPage from "./pages/MoviesPage/MoviesPage.tsx";
+import FavoritesPage from "./pages/FavoritesPage/FavoritesPage.tsx";
+import './index.module.scss';
 
 function App() {
     return (

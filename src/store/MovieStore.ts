@@ -1,4 +1,3 @@
-import "vite/client";
 import {computed, makeAutoObservable, runInAction} from 'mobx';
 import {IMovie, SortDirection, SortField} from "../types/types";
 
@@ -35,6 +34,7 @@ class MovieStore {
     async fetchMovies() {
         try {
             this.isLoading = true;
+            // @ts-ignore
             const apiKey = import.meta.env.VITE_OMDB_API_KEY;
 
             const response = await fetch(
@@ -73,6 +73,7 @@ class MovieStore {
 
     async fetchMovieById(imdbID: string): Promise<IMovie | null> {
         try {
+            // @ts-ignore
             const apiKey = import.meta.env.VITE_OMDB_API_KEY;
             const response = await fetch(
                 `http://www.omdbapi.com/?apikey=${apiKey}&i=${imdbID}&plot=short`

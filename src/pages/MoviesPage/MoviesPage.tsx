@@ -5,7 +5,8 @@ import { List, Skeleton, Select, Input, Radio } from 'antd';
 import { movieStore } from '../../store/MovieStore';
 import MovieCard from '../../components/MovieCard/MovieCard';
 import SearchBar from '../../components/SearchBar/SearchBar';
-import styles from './MoviesPage.module.scss';
+// @ts-ignore
+import styles from "./MoviesPage.module.scss"
 
 const { Option } = Select;
 
